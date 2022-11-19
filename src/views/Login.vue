@@ -1,30 +1,88 @@
 <template>
-  <div>
-    <h1>Login</h1>
-    <form @submit.prevent="handleSubmit">
-      <input type="email" placeholder="Ingrese email" v-model.trim="email" />
-      <input type="password" placeholder="Ingrese contraseña" v-model.trim="password" />
-      <button type="submit" :disabled="userStore.loadingUser">Acceso</button>
-    </form>
-  </div>
+  <h1 class="text-center">Login</h1>
+  <a-row>
+    <a-col :xs="{ span: 24 }" :sm="{ span: 12, offset: 6 }">
+      <a-form
+        :model="formState"
+        name="basicLogin"
+        autocomplete="off"
+        layout="vertical"
+        @finish="onFinish"
+        @finishFailed="onFinishFailed"
+      >
+        <a-form-item
+          name="email"
+          label="Email"
+          :rules="[
+            {
+              required: true,
+              message: 'Debe insertar un email válido',
+              whitespace: true,
+              type: 'email',
+            },
+          ]"
+        >
+          <a-input v-model:value="formState.email" />
+        </a-form-item>
+        <a-form-item
+          name="password"
+          label="Password"
+          :rules="[
+            {
+              required: true,
+              message: 'Debe insertar password de al menos 6 caracteres',
+              min: 6,
+              whitespace: true,
+            },
+          ]"
+        >
+          <a-input-password v-model:value="formState.password" />
+        </a-form-item>
+        <a-form-item>
+          <a-button
+            type="primary"
+            html-type="submit"
+            :loading="userStore.loadingUser"
+            :disabled="userStore.loadingUser"
+            >Acceso
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </a-col>
+  </a-row>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { reactive } from "vue";
 import { useUserStore } from "../stores/user";
-import { useRouter } from "vue-router";
+import { message } from "ant-design-vue";
 
 const userStore = useUserStore();
-const router = useRouter();
 
-const email = ref("");
-const password = ref("");
+const formState = reactive({
+  email: "",
+  password: "",
+});
 
-const handleSubmit = async () => {
-  if (!email.value || password.value.length < 6) {
-    return alert("Por favor inserte los datos en los campos indicados");
+const onFinish = async (values) => {
+  console.log("Success:", values);
+  const error = await userStore.loginUser(formState.email, formState.password);
+  if (!error) {
+    return message.success("Bienvenidos a la super app 💋");
   }
-  await userStore.loginUser(email.value, password.value);
-  router.push("/");
+  switch (error) {
+    case "auth/user-not-found":
+      message.error("No existe el correo registrado 💋");
+      break;
+    case "auth/wrong-password":
+      message.error("Error de contraseña 💋");
+      break;
+    default:
+      message.error("Ocurrió un error en el servidor 💋 intentelo más tarde...");
+      break;
+  }
+};
+const onFinishFailed = (errorInfo) => {
+  console.log("Failed:", errorInfo);
 };
 </script>
