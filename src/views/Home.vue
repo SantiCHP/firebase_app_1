@@ -1,7 +1,13 @@
 <template>
   <div class="horizontal-padding-sm">
     <h1 class="text-center">Home Ruta protegida</h1>
-    <p>{{ userStore.userData?.email }}</p>
+    <div class="position-center">
+      <a-avatar :size="100" :src="userStore.userData.photoURL"></a-avatar>
+      <p style="margin-top: 15px">
+        <b>{{ userStore.userData.displayName }}</b>
+      </p>
+      <p>{{ userStore.userData?.email }}</p>
+    </div>
 
     <add-form></add-form>
 

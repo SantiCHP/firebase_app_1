@@ -14,6 +14,9 @@
         <a-menu-item key="home" v-if="userStore.userData">
           <router-link to="/">Home</router-link>
         </a-menu-item>
+        <a-menu-item key="perfil" v-if="userStore.userData">
+          <router-link to="/perfil">Perfil</router-link>
+        </a-menu-item>
         <a-menu-item key="login" v-if="!userStore.userData">
           <router-link to="/login">Login</router-link>
         </a-menu-item>
@@ -60,6 +63,9 @@ watch(
 .text-center {
   text-align: center;
   padding-top: 80px;
+}
+.position-center{
+  text-align: center;
 }
 .horizontal-padding-sm {
   padding: 0 15px;
