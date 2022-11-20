@@ -93,7 +93,7 @@ const handleChange = (info) => {
       handleRemove(info.file);
       return;
     }
-    const isLt2M = info.file.size / 1024 / 1024 < 2;
+    const isLt2M = info.file.size / 1024 / 1024 < 5;
     if (!isLt2M) {
       message.error("La imagen debe ocupar menos de 2MB");
       handleRemove(info.file);
@@ -113,24 +113,17 @@ const handleChange = (info) => {
 };
 
 const onFinish = async () => {
-  const error = await userStore.updateUser(userStore.userData.displayName);
-
-  if (fileList.value[0]) {
-    const error = await userStore.updateImg(fileList.value[0]);
-    if (error) {
-      return message.error("Ha surgido algún problema al subir tu imagen 💋");
-    }
-    message.success("Se ha actualizado tu imagen 💋");
-  }
+  const error = await userStore.updateUser(
+    userStore.userData.displayName,
+    fileList.value[0]
+  );
 
   if (!error) {
-    return message.success("Perfil actualizado (displayName) 💋");
+    return message.success("Perfil actualizado 💋");
   }
   switch (error) {
     default:
-      message.error(
-        "Ocurrió un error al actualizar los datos del perfil (displayName) 💋"
-      );
+      message.error("Ocurrió un error al actualizar los datos del perfil 💋");
       break;
   }
 };
