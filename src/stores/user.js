@@ -40,6 +40,7 @@ export const useUserStore = defineStore('userStore', {
             }
         },
         async updateUser( displayName, imagen ){
+            this.loadingUser = true;
             try {
                 if( imagen ){
                     const storageRef = ref(storage, `perfiles/${this.userData.uid}`);
@@ -56,7 +57,9 @@ export const useUserStore = defineStore('userStore', {
             } catch (error) {
                 console.log(error);
                 return error.code;
-            } finally {}
+            } finally {
+                this.loadingUser = false;
+            }
         },
         async setUser( user ){
             try {

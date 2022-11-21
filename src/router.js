@@ -1,11 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from './stores/user'
+import { useDatabaseStore } from './stores/database'
 
 import Home from './views/Home.vue'
 import Editar from './views/Editar.vue'
 import Register from './views/Register.vue'
 import Login from './views/Login.vue'
 import Perfil from './views/Perfil.vue'
+import NotFound from './views/NotFound.vue'
 
 const requireAuth = async( to, from, next ) => {
     const userStore = useUserStore();
@@ -17,6 +19,24 @@ const requireAuth = async( to, from, next ) => {
         next('/login');
     }
     userStore.loadingSession = false;
+};
+
+const redireccion = async ( to, from, next ) => {
+    const databaseStore = useDatabaseStore();
+    const userStore = useUserStore();
+    userStore.loadingSession = true;
+    //console.log(to.params.pathMatch[0]);
+    const name = await databaseStore.getURL(to.params.pathMatch[0]);
+    if(!name){ 
+        next(); 
+        userStore.loadingSession = false;
+    } else { 
+        window.location.href = name; 
+        userStore.loadingSession = true;
+        next(); 
+    }
+
+    
 }
 
 const routes = [
@@ -25,6 +45,7 @@ const routes = [
     { path: '/editar/:id', component: Editar, beforeEnter: requireAuth, name: 'editar' },
     { path: '/register', component: Register, name: 'register' },
     { path: '/login', component: Login, name: 'login' },
+    { path: '/:pathMatch(.*)*', component: NotFound, beforeEnter: redireccion, name: '404' },
 ]
 
 const router = createRouter({

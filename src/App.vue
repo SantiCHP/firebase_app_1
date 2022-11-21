@@ -30,8 +30,8 @@
     </a-layout-header>
     <a-layout-content style="padding: 0 50px">
       <div class="container">
-        <div v-if="userStore.loadingSession">Loading user...</div>
-        <router-view></router-view>
+        <div v-if="userStore.loadingSession">Loading...</div>
+        <router-view v-else></router-view>
       </div>
     </a-layout-content>
   </a-layout>
@@ -64,7 +64,7 @@ watch(
   text-align: center;
   padding-top: 80px;
 }
-.position-center{
+.position-center {
   text-align: center;
 }
 .horizontal-padding-sm {
