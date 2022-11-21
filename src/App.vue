@@ -47,7 +47,6 @@ const route = useRoute();
 
 const selectedKeys = ref([]);
 
-//console.log(route.name);
 watch(
   () => route.name,
   () => (selectedKeys.value = [route.name])

@@ -70,9 +70,9 @@ import { message } from "ant-design-vue";
 const userStore = useUserStore();
 
 const formState = reactive({
-  email: "santi1@email.com",
-  password: "123456",
-  repassword: "123456",
+  email: "",
+  password: "",
+  repassword: "",
 });
 
 const validatePass = async (_rule, value) => {
@@ -85,8 +85,7 @@ const validatePass = async (_rule, value) => {
   return Promise.resolve();
 };
 
-const onFinish = async (values) => {
-  console.log("Success:", values);
+const onFinish = async () => {
   const error = await userStore.registerUser(formState.email, formState.password);
   if (!error) {
     return message.success("Revisa tu correo electrónico y verificalo 💋");

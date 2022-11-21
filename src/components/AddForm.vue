@@ -9,8 +9,7 @@ const formState = reactive({
   url: "",
 });
 
-const onFinish = async (value) => {
-  console.log("todo correcto " + value);
+const onFinish = async () => {
   const error = await databaseStore.addUrl(formState.url);
   if (!error) {
     formState.url = "";

@@ -114,8 +114,6 @@ export const useUserStore = defineStore('userStore', {
                     auth, 
                     async ( user ) => {
                         if( user ){
-                            console.log( user );
-                            //await this.setUser(user);
                             this.userData = { 
                                 email: user.email,
                                 uid: user.uid,
